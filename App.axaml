@@ -4,15 +4,27 @@
              x:Class="Toashot.App"
              xmlns:local="using:Toashot"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
 
+    <Application.Resources>
+        <FontFamily x:Key="AppFont">
+            avares://Toashot/Assets/AvertaDemoPE-Regular.otf#Averta Demo PE,
+            avares://Toashot/Assets/SourceHanSansCN-Regular#Source Han Sans CN
+        </FontFamily>
+    </Application.Resources>
+
     <Application.Styles>
         <!-- <FluentTheme /> -->    
         <shadui:ShadTheme />
+        <Style Selector=":is(TopLevel)">
+            <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
+        </Style>
+        <Style Selector=":is(Control)">
+            <Setter Property="TextElement.FontFamily" Value="{StaticResource AppFont}" />
+        </Style>
     </Application.Styles>
 
     <TrayIcon.Icons>
@@ -20,16 +32,10 @@
             <TrayIcon Icon="/Assets/icon.ico" ToolTipText="Toashot">
                 <TrayIcon.Menu>
                     <NativeMenu>
-                        <NativeMenuItem Header="Toashot">
-                            <NativeMenu>
-                                <NativeMenuItem Header="开启" ToggleType="CheckBox" />
-                                <NativeMenuItem Header="查看暂存区"/>
-                            </NativeMenu>
-                        </NativeMenuItem>
+                        <NativeMenuItem Header="Toashot: 查看暂存区" Click="OnOpenToashot" />
                         <NativeMenuItemSeparator />
-                        <NativeMenuItem Header="设置" />
-                        <NativeMenuItem Header="开机自启" ToggleType="CheckBox" />
-                        <NativeMenuItem Header="退出"/>
+                        <NativeMenuItem Header="设置" Click="OnOpenSettings" />
+                        <NativeMenuItem Header="退出" Click="OnExit" />
                     </NativeMenu>
                 </TrayIcon.Menu>
             </TrayIcon>

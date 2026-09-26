@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Toashot.Modules.Settings"
+        x:Class="Toashot.Modules.Settings.SettingsWindow"
+        x:DataType="vm:SettingsViewModel"
+        Title="设置"
+        Width="480" Height="480"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/icon.ico"
+>
+
+    <Design.DataContext>
+        <vm:SettingsViewModel />
+    </Design.DataContext>
+
+    <Button Content="Test" />
+</Window>

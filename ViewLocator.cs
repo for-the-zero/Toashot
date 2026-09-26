@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Toashot.ViewModels;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Toashot;
 
@@ -19,7 +19,7 @@ public class ViewLocator : IDataTemplate
         if (param is null)
             return null;
         
-        var name = param.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
+        var name = param.GetType().FullName!.Replace("ViewModel", "Window", StringComparison.Ordinal);
         var type = Type.GetType(name);
 
         if (type != null)
@@ -32,6 +32,6 @@ public class ViewLocator : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is ViewModelBase;
+        return data is ObservableObject;
     }
 }
