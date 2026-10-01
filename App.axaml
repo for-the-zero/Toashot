@@ -32,7 +32,7 @@
             <TrayIcon Icon="/Assets/icon.ico" ToolTipText="Toashot">
                 <TrayIcon.Menu>
                     <NativeMenu>
-                        <NativeMenuItem Header="Toashot: 查看暂存区" Click="OnOpenToashot" />
+                        <NativeMenuItem Header="查看截图暂存区" Click="OnOpenToashotT" />
                         <NativeMenuItemSeparator />
                         <NativeMenuItem Header="设置" Click="OnOpenSettings" />
                         <NativeMenuItem Header="退出" Click="OnExit" />

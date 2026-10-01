@@ -15,10 +15,31 @@ public partial class App : Application
         DataContext = this;
     }
 
-    private void OnOpenToashot(object? sender, EventArgs e)
-        => new ToashotWindow(new ToashotViewModel()).Show();
+    private ToashotTempWindow? _toashotTempWindow;
+    private SettingsWindow? _settingsWindow;
+
+    private void OnOpenToashotT(object? sender, EventArgs e)
+    {
+        if (_toashotTempWindow is not null)
+        {
+            _toashotTempWindow.Activate();
+            return;
+        }
+        _toashotTempWindow = new ToashotTempWindow(new ToashotTempViewModel());
+        _toashotTempWindow.Closed += (_, _) => _toashotTempWindow = null;
+        _toashotTempWindow.Show();
+    }
     private void OnOpenSettings(object? sender, EventArgs e)
-        => new SettingsWindow(new SettingsViewModel()).Show();
+    {
+        if (_settingsWindow is not null)
+        {
+            _settingsWindow.Activate();
+            return;
+        }
+        _settingsWindow = new SettingsWindow(new SettingsViewModel());
+        _settingsWindow.Closed += (_, _) => _settingsWindow = null;
+        _settingsWindow.Show();
+    }
     private void OnExit(object? sender, EventArgs e)
         => (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown(0);
 
