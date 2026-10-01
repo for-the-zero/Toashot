@@ -1,8 +1,6 @@
-using Avalonia.Controls;
-
 namespace Toashot.Modules.Settings;
 
-public partial class SettingsWindow : Window
+public partial class SettingsWindow : ShadUI.Window
 {
     public SettingsWindow()
     {
@@ -13,5 +11,6 @@ public partial class SettingsWindow : Window
     {
         DataContext = viewModel;
         viewModel.CloseAction = Close;
+        viewModel.TopLevel = this;
     }
 }

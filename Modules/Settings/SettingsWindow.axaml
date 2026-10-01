@@ -1,6 +1,8 @@
-<Window xmlns="https://github.com/avaloniaui"
+<shadui:Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shadui="using:ShadUI"
         xmlns:vm="using:Toashot.Modules.Settings"
+        xmlns:lucide="using:Lucide.Avalonia"
         x:Class="Toashot.Modules.Settings.SettingsWindow"
         x:DataType="vm:SettingsViewModel"
         Title="设置"
@@ -13,5 +15,50 @@
         <vm:SettingsViewModel />
     </Design.DataContext>
 
-    <Button Content="Test" />
-</Window>
+    <UserControl>
+        <TabControl Margin="10">
+
+            <TabItem Header="关于">
+                <StackPanel Margin="5" Spacing="10" HorizontalAlignment="Center">
+                    <Image Source="/Assets/icon.ico" Width="96" Height="96" Margin="5"/>
+                    <TextBlock HorizontalAlignment="Center" FontSize="35">Toashot</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Foreground="Gray">v1.0.0</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15">一个更加方便的截图工具</TextBlock>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5" Margin="5">
+                        <Button Classes="Outline" Command="{Binding OpenGithubCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <lucide:LucideIcon Kind="CodeXml" Size="16"/>
+                                <TextBlock Text="Github" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="Outline" Command="{Binding OpenAuthorCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <lucide:LucideIcon Kind="House" Size="16"/>
+                                <TextBlock Text="关于作者" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="全局">
+                <StackPanel Margin="5" Spacing="10">
+                    <TextBlock FontSize="15">语言 / Language</TextBlock>
+                    <ComboBox SelectedIndex="0" Margin="5">
+                        <ComboBoxItem>简体中文</ComboBoxItem>
+                        <ComboBoxItem>English</ComboBoxItem>
+                    </ComboBox>
+                    <TextBlock FontSize="15">开机自启动</TextBlock>
+                    <ToggleSwitch IsChecked="{Binding IsAutoStartup}" Margin="5"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Toashot">
+                <StackPanel Margin="5" Spacing="10">
+                    <!-- TODO: -->
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+    </UserControl>
+</shadui:Window>

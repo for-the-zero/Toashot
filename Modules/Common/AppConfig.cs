@@ -73,7 +73,7 @@ public partial class AppConfig : ObservableObject
     public partial class GlobalSettings : ObservableObject
     {
         [ObservableProperty] private string _lang = "zh-CN"; // zh-CN, en
-        [ObservableProperty] private bool _autostart = false;
+        // [ObservableProperty] private bool _autostart = false;
     }
 
     public partial class ToashotSettings : ObservableObject

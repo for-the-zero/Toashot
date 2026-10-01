@@ -1,5 +1,6 @@
-<Window xmlns="https://github.com/avaloniaui"
+<shadui:Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shadui="using:ShadUI"
         xmlns:vm="using:Toashot.Modules.Toashot"
         x:Class="Toashot.Modules.Toashot.ToashotTempWindow"
         x:DataType="vm:ToashotTempViewModel"
@@ -14,4 +15,4 @@
     </Design.DataContext>
 
     <Button Content="Test" />
-</Window>
+</shadui:Window>

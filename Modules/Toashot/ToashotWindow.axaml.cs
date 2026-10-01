@@ -1,8 +1,6 @@
-using Avalonia.Controls;
-
 namespace Toashot.Modules.Toashot;
 
-public partial class ToashotWindow : Window
+public partial class ToashotWindow : ShadUI.Window
 {
     public ToashotWindow()
     {
