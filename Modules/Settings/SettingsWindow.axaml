@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shadui="using:ShadUI"
         xmlns:vm="using:Toashot.Modules.Settings"
+        xmlns:common="using:Toashot.Avalonia.Common"
         xmlns:lucide="using:Lucide.Avalonia"
         x:Class="Toashot.Modules.Settings.SettingsWindow"
         x:DataType="vm:SettingsViewModel"
@@ -55,7 +56,28 @@
 
             <TabItem Header="Toashot">
                 <StackPanel Margin="5" Spacing="10">
-                    <!-- TODO: -->
+                    <TextBlock FontSize="15">截图保存目录</TextBlock>
+                    <Grid ColumnDefinitions="*,Auto" Margin="5">
+                        <TextBox Grid.Column="0" Text="{Binding AppConfig.Toashot.Path}" IsReadOnly="True" />
+                        <Button Grid.Column="1" Classes="Outline" Margin="8,0,0,0" Command="{Binding ToashotPathBtnCommand}">修改保存目录</Button>
+                    </Grid>
+                    <TextBlock FontSize="15">截图快捷键</TextBlock>
+                    <Grid ColumnDefinitions="*,Auto" Margin="5">
+                        <common:HotkeyBox Grid.Column="0"
+                            Text="{Binding DraftShortcut}"
+                            PlaceholderText="点击后按下快捷键，Esc 撤销" />
+                    </Grid>
+                    <TextBlock FontSize="15">快速截图快捷键</TextBlock>
+                    <Grid ColumnDefinitions="*,Auto" Margin="5">
+                        <common:HotkeyBox Grid.Column="0"
+                            Text="{Binding DraftFastShot}"
+                            PlaceholderText="点击后按下快捷键，Esc 撤销" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" Margin="5">
+                        <TextBlock Grid.Column="0" Text="{Binding HotkeyMessage}"
+                            Foreground="Gray" VerticalAlignment="Center" TextWrapping="Wrap" />
+                        <Button Grid.Column="1" Classes="Outline" Margin="8,0,0,0" Command="{Binding ApplyHotkeyCommand}">应用</Button>
+                    </Grid>
                 </StackPanel>
             </TabItem>
 
