@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Toashot.Avalonia.Common;
 using Toashot.Modules.Settings;
 using Toashot.Modules.Toashot;
 
@@ -41,7 +42,10 @@ public partial class App : Application
         _settingsWindow.Show();
     }
     private void OnExit(object? sender, EventArgs e)
-        => (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown(0);
+    {
+        Listener.Instance.Stop();
+        (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown(0);
+    }
 
 
     public override void Initialize()
@@ -53,6 +57,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            ToashotSvc.Start();
         }
 
         base.OnFrameworkInitializationCompleted();

@@ -55,30 +55,35 @@
             </TabItem>
 
             <TabItem Header="Toashot">
-                <StackPanel Margin="5" Spacing="10">
-                    <TextBlock FontSize="15">截图保存目录</TextBlock>
-                    <Grid ColumnDefinitions="*,Auto" Margin="5">
-                        <TextBox Grid.Column="0" Text="{Binding AppConfig.Toashot.Path}" IsReadOnly="True" />
-                        <Button Grid.Column="1" Classes="Outline" Margin="8,0,0,0" Command="{Binding ToashotPathBtnCommand}">修改保存目录</Button>
-                    </Grid>
-                    <TextBlock FontSize="15">截图快捷键</TextBlock>
-                    <Grid ColumnDefinitions="*,Auto" Margin="5">
-                        <common:HotkeyBox Grid.Column="0"
-                            Text="{Binding DraftShortcut}"
-                            PlaceholderText="点击后按下快捷键，Esc 撤销" />
-                    </Grid>
-                    <TextBlock FontSize="15">快速截图快捷键</TextBlock>
-                    <Grid ColumnDefinitions="*,Auto" Margin="5">
-                        <common:HotkeyBox Grid.Column="0"
-                            Text="{Binding DraftFastShot}"
-                            PlaceholderText="点击后按下快捷键，Esc 撤销" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto" Margin="5">
-                        <TextBlock Grid.Column="0" Text="{Binding HotkeyMessage}"
-                            Foreground="Gray" VerticalAlignment="Center" TextWrapping="Wrap" />
-                        <Button Grid.Column="1" Classes="Outline" Margin="8,0,0,0" Command="{Binding ApplyHotkeyCommand}">应用</Button>
-                    </Grid>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel Margin="5" Spacing="10">
+                        <TextBlock FontSize="15">启用该功能</TextBlock>
+                        <ToggleSwitch IsChecked="{Binding AppConfig.Toashot.Enabled}" Margin="5"/>
+                        <TextBlock FontSize="15">截图保存目录</TextBlock>
+                        <Grid ColumnDefinitions="*,Auto" Margin="5">
+                            <TextBox Grid.Column="0" Text="{Binding AppConfig.Toashot.Path}" IsReadOnly="True" />
+                            <Button Grid.Column="1" Classes="Outline" Margin="8,0,0,0" Command="{Binding ToashotPathBtnCommand}">修改保存目录</Button>
+                        </Grid>
+                        <Separator/>
+                        <TextBlock FontSize="15">截图快捷键</TextBlock>
+                        <Grid ColumnDefinitions="*,Auto" Margin="5">
+                            <common:HotkeyBox Grid.Column="0"
+                                Text="{Binding DraftShortcut}"
+                                PlaceholderText="点击后按下快捷键，Esc 撤销" />
+                        </Grid>
+                        <TextBlock FontSize="15">快速截图快捷键</TextBlock>
+                        <Grid ColumnDefinitions="*,Auto" Margin="5">
+                            <common:HotkeyBox Grid.Column="0"
+                                Text="{Binding DraftFastShot}"
+                                PlaceholderText="点击后按下快捷键，Esc 撤销" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="5">
+                            <TextBlock Grid.Column="0" Text="{Binding HotkeyMessage}"
+                                Foreground="Gray" VerticalAlignment="Center" TextWrapping="Wrap" />
+                            <Button Grid.Column="1" Classes="Outline" Margin="8,0,0,0" Command="{Binding ApplyHotkeyCommand}">应用快捷键</Button>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
 
         </TabControl>

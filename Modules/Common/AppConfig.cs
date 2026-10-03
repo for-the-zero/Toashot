@@ -78,6 +78,7 @@ public partial class AppConfig : ObservableObject
 
     public partial class ToashotSettings : ObservableObject
     {
+        [ObservableProperty] private bool _enabled = true;
         [ObservableProperty] private string _path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         [ObservableProperty] private string _shortcut = "PrintScreen";
         [ObservableProperty] private string _fastShot = "Alt+PrintScreen";

@@ -11,9 +11,10 @@ public sealed class Listener
 {
     public static Listener Instance { get; } = new();
 
-    private readonly List<(Key Key, KeyModifiers Modifiers, Action Callback)> _bindings = new();
-    private readonly EventLoopGlobalHook _hook = new();
+    private readonly List<(Key Key, KeyModifiers KeyModifiers, Action Callback)> _bindings = new();
+    private readonly EventLoopGlobalHook _hook = new(useBackgroundThreadForEventLoop: true);
     private KeyModifiers _pressedModifiers;
+    private readonly HashSet<Key> _downKeys = new();
 
     public event Action<Key, KeyModifiers>? AnyKeyPressed;
     public event Action<Key>? AnyKeyReleased;
@@ -32,7 +33,7 @@ public sealed class Listener
     private Task? _running;
 
     /// <summary>开始监听，重复调用无害。后台线程跑，不阻塞调用方。</summary>
-    public void Start() => _running ??= _hook.RunAsync(GlobalHookType.All, false);
+    public void Start() => _running ??= _hook.RunAsync(GlobalHookType.All, useBackgroundThread: true);
 
     /// <summary>钩子起来了吗。没起来一般是被系统权限挡住了。</summary>
     public bool IsRunning => _running is { IsCompleted: false };
@@ -42,15 +43,19 @@ public sealed class Listener
 
     public void Bind(string? gesture, Action callback)
     {
-        if (TryParse(gesture, out var key, out var modifiers)) _bindings.Add((key, modifiers, callback));
+        if (!TryParse(gesture, out var key, out var modifiers)) return;
+        lock (_bindings) _bindings.Add((key, modifiers, callback));
     }
     public bool Unbind(string? gesture)
     {
         if (!TryParse(gesture, out var key, out var modifiers)) return false;
-        var index = _bindings.FindIndex(b => b.Key == key && b.Modifiers == modifiers);
-        if (index < 0) return false;
-        _bindings.RemoveAt(index);
-        return true;
+        lock (_bindings)
+        {
+            var index = _bindings.FindIndex(b => b.Key == key && b.KeyModifiers == modifiers);
+            if (index < 0) return false;
+            _bindings.RemoveAt(index);
+            return true;
+        }
     }
 
     private void OnKeyPressed(object? sender, KeyboardHookEventArgs e)
@@ -59,8 +64,11 @@ public sealed class Listener
         var modifiers = TrackModifiers(e.Data.KeyCode, pressed: true);
         AnyKeyPressed?.Invoke(key, modifiers);
         if (key == Key.None) return;
-        foreach (var binding in _bindings)
-            if (binding.Key == key && binding.Modifiers == modifiers)
+        if (!_downKeys.Add(key)) return;
+        (Key Key, KeyModifiers KeyModifiers, Action Callback)[] snapshot;
+        lock (_bindings) snapshot = _bindings.ToArray();
+        foreach (var binding in snapshot)
+            if (binding.Key == key && binding.KeyModifiers == modifiers)
             {
                 binding.Callback();
                 return;
@@ -69,8 +77,10 @@ public sealed class Listener
 
     private void OnKeyReleased(object? sender, KeyboardHookEventArgs e)
     {
+        var key = ToAvaloniaKey(e.Data.KeyCode);
+        _downKeys.Remove(key);
         TrackModifiers(e.Data.KeyCode, pressed: false);
-        AnyKeyReleased?.Invoke(ToAvaloniaKey(e.Data.KeyCode));
+        AnyKeyReleased?.Invoke(key);
     }
 
     private KeyModifiers TrackModifiers(KeyCode code, bool pressed)

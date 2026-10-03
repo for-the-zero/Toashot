@@ -26,5 +26,6 @@
     <PackageReference Include="Lucide.Avalonia" Version="0.2.24" />
     <PackageReference Include="ShadUI" Version="0.2.4" />
     <PackageReference Include="SharpHook" Version="8.0.0" />
+    <PackageReference Include="Shutter" Version="1.1.0" />
   </ItemGroup>
 </Project>

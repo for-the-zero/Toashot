@@ -17,6 +17,7 @@ public partial class SettingsViewModel : ObservableObject
     public TopLevel? TopLevel { get; set; }
 
     public static AppConfig AppConfig => AppConfiger.Config;
+    private static readonly SafeAutoLauncher Launcher = new AutoLaunchBuilder().Automatic().BuildSafe();
 
     private Task OpenUri(string uri)
         => TopLevel?.Launcher?.LaunchUriAsync(new Uri(uri)) ?? Task.CompletedTask;
@@ -25,10 +26,9 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private Task OpenAuthor() => OpenUri("https://ftz.is-a.dev");
 
-    private static readonly SafeAutoLauncher Launcher = new AutoLaunchBuilder().Automatic().BuildSafe();
+    
     [ObservableProperty]
     public partial bool IsAutoStartup { get; set; } = Launcher.TryGetStatus().enabled;
-
     partial void OnIsAutoStartupChanged(bool value)
     {
         if (value)
