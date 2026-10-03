@@ -64,6 +64,15 @@
                             <TextBox Grid.Column="0" Text="{Binding AppConfig.Toashot.Path}" IsReadOnly="True" />
                             <Button Grid.Column="1" Classes="Outline" Margin="8,0,0,0" Command="{Binding ToashotPathBtnCommand}">修改保存目录</Button>
                         </Grid>
+                        <TextBlock FontSize="15">Toast 位置</TextBlock>
+                        <ComboBox SelectedIndex="{Binding PlacementIndex}" Margin="5">
+                            <ComboBoxItem>左上角</ComboBoxItem>
+                            <ComboBoxItem>右上角</ComboBoxItem>
+                            <ComboBoxItem>左下角</ComboBoxItem>
+                            <ComboBoxItem>右下角</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock FontSize="15" Text="{Binding Margin, StringFormat='距离屏幕边缘：{0}'}"></TextBlock>
+                        <Slider Minimum="0" Maximum="100" TickFrequency="5" IsSnapToTickEnabled="True" TickPlacement="TopLeft" Value="{Binding Margin}" />
                         <Separator/>
                         <TextBlock FontSize="15">截图快捷键</TextBlock>
                         <Grid ColumnDefinitions="*,Auto" Margin="5">

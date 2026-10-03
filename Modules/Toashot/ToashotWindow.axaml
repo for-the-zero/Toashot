@@ -1,18 +1,24 @@
-<shadui:Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:shadui="using:ShadUI"
-        xmlns:vm="using:Toashot.Modules.Toashot"
-        x:Class="Toashot.Modules.Toashot.ToashotWindow"
-        x:DataType="vm:ToashotViewModel"
-        Title="Toashot"
-        Width="480" Height="480"
-        WindowStartupLocation="CenterScreen"
-        Icon="/Assets/icon.ico"
+<Window xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shadui="using:ShadUI"
+    xmlns:vm="using:Toashot.Modules.Toashot"
+    x:Class="Toashot.Modules.Toashot.ToashotWindow"
+    x:DataType="vm:ToashotViewModel"
+    Icon="/Assets/icon.ico"
+    Title="Toashot"
+
+    Width="350" Height="75"
+    WindowStartupLocation="Manual"
+    CanResize="False"
+    SizeToContent="Manual"
+    WindowDecorations="None"
+    ShowInTaskbar="False"
+    ShowActivated="False"
+    Topmost="True"
 >
 
-    <Design.DataContext>
-        <vm:ToashotViewModel />
-    </Design.DataContext>
-
-    <Button Content="Test" />
-</shadui:Window>
+    <StackPanel Margin="10" Spacing="10" Focusable="False">
+        <Image Source="{Binding Image}" Stretch="Uniform" />
+        <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap" />
+    </StackPanel>
+</Window>

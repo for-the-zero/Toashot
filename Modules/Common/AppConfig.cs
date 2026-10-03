@@ -65,7 +65,6 @@ public static class AppConfiger
 }
 
 
-/// <summary>配置文件</summary>
 public partial class AppConfig : ObservableObject
 {
     [ObservableProperty] private GlobalSettings _global = new();
@@ -82,6 +81,10 @@ public partial class AppConfig : ObservableObject
         [ObservableProperty] private string _path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         [ObservableProperty] private string _shortcut = "PrintScreen";
         [ObservableProperty] private string _fastShot = "Alt+PrintScreen";
+        [ObservableProperty] private int _margin = 20;
+
+        public enum ShotPlacement { TL = 0, TR = 1, BL = 2, BR = 3 }
+        [ObservableProperty] private ShotPlacement _placement = 0;
     }
 }
 public partial class PersistentState : ObservableObject

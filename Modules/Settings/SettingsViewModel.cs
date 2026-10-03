@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using AutoLaunch;
 using global::Toashot.Avalonia.Common;
@@ -54,6 +53,15 @@ public partial class SettingsViewModel : ObservableObject
         if(path == null) return;
         AppConfig.Toashot.Path = path;
     }
+
+    [ObservableProperty]
+    private int _placementIndex = (int)AppConfig.Toashot.Placement;
+    partial void OnPlacementIndexChanged(int value)
+        => AppConfig.Toashot.Placement = (AppConfig.ToashotSettings.ShotPlacement)value;
+    [ObservableProperty]
+    private decimal _margin = AppConfig.Toashot.Margin;
+    partial void OnMarginChanged(decimal value)
+        => AppConfig.Toashot.Margin = (int)value;
 
     [ObservableProperty]
     public partial string? DraftShortcut { get; set; } = AppConfig.Toashot.Shortcut;

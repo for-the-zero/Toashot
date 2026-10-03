@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Input;
 using SharpHook;
 using SharpHook.Data;
@@ -16,6 +17,9 @@ public sealed class Listener
     private KeyModifiers _pressedModifiers;
     private readonly HashSet<Key> _downKeys = new();
 
+    private PixelPoint _lastMouse;
+    public PixelPoint LastMouse => _lastMouse;
+
     public event Action<Key, KeyModifiers>? AnyKeyPressed;
     public event Action<Key>? AnyKeyReleased;
     public event Action<SharpHook.Data.MouseButton>? AnyMousePressed;
@@ -27,18 +31,14 @@ public sealed class Listener
         _hook.KeyReleased += OnKeyReleased;
         _hook.MousePressed += (_, e) => AnyMousePressed?.Invoke(e.Data.Button);
         _hook.MouseWheel += (_, e) => AnyWheel?.Invoke(e.Data.Rotation);
+        _hook.MouseMoved += (_, e) => _lastMouse = new PixelPoint(e.Data.X, e.Data.Y);
         // TODO: 鼠标移动/拖拽/按键抬起(KeyTyped)/点击，用到了再挂
     }
 
     private Task? _running;
 
-    /// <summary>开始监听，重复调用无害。后台线程跑，不阻塞调用方。</summary>
     public void Start() => _running ??= _hook.RunAsync(GlobalHookType.All, useBackgroundThread: true);
-
-    /// <summary>钩子起来了吗。没起来一般是被系统权限挡住了。</summary>
     public bool IsRunning => _running is { IsCompleted: false };
-
-    // TODO: 启动失败（权限不足）时给用户一个提示，现在只是静默不监听
     public void Stop() => _hook.Stop();
 
     public void Bind(string? gesture, Action callback)
