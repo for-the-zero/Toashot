@@ -49,33 +49,32 @@ public static class ToashotSvc
         => screens.ScreenFromPoint(Listener.Instance.LastMouse)
             ?? screens.Primary
             ?? throw new InvalidOperationException("取不到主屏信息");
+    private static Screen? SafeScreen(ToashotWindow win)
+        => win.Screens is { } s ? ScreenAtCursor(s) : null;
 
     private static async Task ShotAsync()
     {
         await Gate.WaitAsync();
+        var win = CreateToast(out var vm);
         try
         {
-            var win = CreateToast(out var vm);
-            var screen = ScreenAtCursor(win.Screens ?? throw new InvalidOperationException("取不到屏幕信息"));
-            var b = screen.Bounds;
-            await Dispatcher.UIThread.InvokeAsync(() => _toast?.Close());
-            var path = await CaptureToFileAsync(Path.GetTempPath(), RegionOptions(b));
+            var screen = SafeScreen(win);
+            var old = await Dispatcher.UIThread.InvokeAsync(() => _toast);
+            if (old is not null) { await old.CloseAsync(); if (old.DataContext is ToashotViewModel o) o.Image?.Dispose(); }
+            var path = await CaptureToFileAsync(Path.Combine(Path.GetTempPath(), "Toashot"), RegionOptions(screen?.Bounds ?? throw new InvalidOperationException("取不到屏幕信息")));
             Dispatcher.UIThread.Post(() =>
-            {
-                vm.Image = new Bitmap(path);
-                Place(win, screen);
-                ShowToast(win);
-            });
+                {
+                    try { vm.FilePath = path; vm.Image = new Bitmap(path); }
+                    catch (Exception e) { Console.WriteLine($"图片解码失败: {e}"); vm.SetError($"图片无法显示：{e.Message}"); }
+                    Place(win, screen); ShowToast(win);
+                });
         }
         catch (Exception ex)
         {
             Console.WriteLine($"截图失败: {ex}");
-            // TODO: 失败时给用户一个看得见的提示
+            Dispatcher.UIThread.Post(() => { vm.SetError($"截图失败：{ex.Message}"); Place(win, SafeScreen(win)); ShowToast(win); });
         }
-        finally
-        {
-            Gate.Release();
-        }
+        finally { Gate.Release(); }
     }
     private static async Task FastShotAsync()
     {
@@ -89,7 +88,7 @@ public static class ToashotSvc
         catch (Exception ex)
         {
             Console.WriteLine($"快速截图失败: {ex}");
-            // TODO: 失败时给用户一个看得见的提示
+            Dispatcher.UIThread.Post(() => { var w = CreateToast(out var v); v.SetError($"快速截图失败：{ex.Message}"); Place(w, SafeScreen(w)); ShowToast(w); });
         }
         finally
         {
@@ -112,14 +111,14 @@ public static class ToashotSvc
     }
     private static void ShowToast(ToashotWindow win)
     {
-        if (_toast?.DataContext is ToashotViewModel old) old.Image?.Dispose();
         _toast?.Close();
         _toast = win;
         win.Show();
     }
 
-    private static void Place(Window win, Screen screen)
+    private static void Place(Window win, Screen? screen)
     {
+        if (screen is null) return;
         var t = AppConfiger.Config.Toashot;
         var b = screen.Bounds;
         var m = t.Margin * screen.Scaling;

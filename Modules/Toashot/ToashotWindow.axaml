@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:shadui="using:ShadUI"
+    xmlns:lucide="using:Lucide.Avalonia"
     xmlns:vm="using:Toashot.Modules.Toashot"
     x:Class="Toashot.Modules.Toashot.ToashotWindow"
     x:DataType="vm:ToashotViewModel"
@@ -15,10 +15,55 @@
     ShowInTaskbar="False"
     ShowActivated="False"
     Topmost="True"
+    Background="Transparent"
+    TransparencyLevelHint="Transparent"
+    RenderTransformOrigin="50%,50%"
 >
+    <Window.Transitions>
+        <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.1" Easing="CubicEaseOut"/>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" Easing="CubicEaseOut"/>
+        </Transitions>
+    </Window.Transitions>
 
-    <StackPanel Margin="10" Spacing="10" Focusable="False">
-        <Image Source="{Binding Image}" Stretch="Uniform" />
-        <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap" />
-    </StackPanel>
+    <Border Focusable="False" CornerRadius="10" Background="#CC1E1E1E"
+            PointerPressed="OnBgPressed" PointerMoved="OnBgMoved" PointerReleased="OnBgReleased">
+        <Grid>
+            <Panel>
+                <Panel.Clip>
+                    <RectangleGeometry Rect="0,0,350,75" RadiusX="10" RadiusY="10"/>
+                </Panel.Clip>
+                <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+            </Panel>
+
+            <Border IsHitTestVisible="False" CornerRadius="10">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                        <GradientStop Color="#CC000000" Offset="0"/>
+                        <GradientStop Color="#99000000" Offset="0.5"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+
+            <Grid ColumnDefinitions="*,Auto" Margin="12,8,12,8">
+                <ScrollViewer Grid.Column="0" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="False">
+                    <TextBlock Text="{Binding Msg}" TextWrapping="Wrap" Foreground="White"/>
+                </ScrollViewer>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Spacing="4" IsVisible="{Binding !Error}">
+                    <Button Classes="Icon" Command="{Binding OpenCommand}">
+                        <lucide:LucideIcon Kind="SquareArrowOutUpRight" Size="16"/>
+                    </Button>
+                    <Button Classes="Icon" Command="{Binding OpenDirCommand}">
+                        <lucide:LucideIcon Kind="Folder" Size="16"/>
+                    </Button>
+                    <Button Classes="Icon" Command="{Binding DeleteCommand}">
+                        <lucide:LucideIcon Kind="Trash" Size="16"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Border IsHitTestVisible="False" CornerRadius="10" BorderBrush="#66FFFFFF" BorderThickness="1"/>
+        </Grid>
+    </Border>
 </Window>
