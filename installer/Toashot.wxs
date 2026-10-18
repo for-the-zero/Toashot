@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <!-- 由 build.ps1 通过 -d 传入 -->
+    <Package Name="Toashot"
+             Manufacturer="for-the-zero"
+             Version="$(var.ProductVersion)"
+             UpgradeCode="6C0B1F5A-2E6C-4B7A-9A4B-1D2E3F4A5B6C"
+             Scope="perUser"
+             Compressed="yes"
+             InstallerVersion="500">
+
+        <MajorUpgrade DowngradeErrorMessage="已安装更高版本的 Toashot，无法降级。" />
+        <MediaTemplate EmbedCab="yes" />
+
+        <Icon Id="AppIcon" SourceFile="$(var.ProjectDir)Assets\icon.ico" />
+        <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+        <Property Id="ARPNOREPAIR" Value="1" />
+
+        <StandardDirectory Id="LocalAppDataFolder">
+            <Directory Id="INSTALLFOLDER" Name="Programs\Toashot" />
+        </StandardDirectory>
+
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ShortcutFolder" Name="Toashot" />
+        </StandardDirectory>
+
+        <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+            <Files Include="$(var.PublishDir)**" />
+        </ComponentGroup>
+
+        <ComponentGroup Id="AppShortcuts" Directory="ShortcutFolder">
+            <Component Id="StartMenuShortcut" Bitness="always64">
+                <Shortcut Id="ToashotShortcut"
+                          Name="Toashot"
+                          Target="[INSTALLFOLDER]Toashot.exe"
+                          WorkingDirectory="INSTALLFOLDER"
+                          Icon="AppIcon" />
+                <RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\Toashot" Name="InstallFolder" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
+            </Component>
+        </ComponentGroup>
+
+        <Feature Id="Main" Title="Toashot" Level="1">
+            <ComponentGroupRef Id="AppFiles" />
+            <ComponentGroupRef Id="AppShortcuts" />
+        </Feature>
+    </Package>
+</Wix>
