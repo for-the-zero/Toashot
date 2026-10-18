@@ -51,13 +51,13 @@
                     <TextBlock Text="{Binding Msg}" TextWrapping="Wrap" Foreground="White"/>
                 </ScrollViewer>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Spacing="4" IsVisible="{Binding !Error}">
-                    <Button Classes="Icon" Command="{Binding OpenCommand}">
+                    <Button Classes="Icon" ToolTip.Tip="保存并打开图片" Command="{Binding OpenCommand}">
                         <lucide:LucideIcon Kind="SquareArrowOutUpRight" Size="16"/>
                     </Button>
-                    <Button Classes="Icon" Command="{Binding OpenDirCommand}">
+                    <Button Classes="Icon" ToolTip.Tip="保存并打开文件夹" Command="{Binding OpenDirCommand}">
                         <lucide:LucideIcon Kind="Folder" Size="16"/>
                     </Button>
-                    <Button Classes="Icon" Command="{Binding DeleteCommand}">
+                    <Button Classes="Icon" ToolTip.Tip="忽略" Command="{Binding DeleteCommand}">
                         <lucide:LucideIcon Kind="Trash" Size="16"/>
                     </Button>
                 </StackPanel>

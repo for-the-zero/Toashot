@@ -19,6 +19,7 @@ public static class ToashotSvc
 {
     private static ToashotWindow? _toast;
     private static readonly SemaphoreSlim Gate = new(3, 3);
+    public static string TempDir => Path.Combine(Path.GetTempPath(), "Toashot");
 
     private static string? _boundShot;
     private static string? _boundFast;
@@ -61,7 +62,7 @@ public static class ToashotSvc
             var screen = SafeScreen(win);
             var old = await Dispatcher.UIThread.InvokeAsync(() => _toast);
             if (old is not null) { await old.CloseAsync(); if (old.DataContext is ToashotViewModel o) o.Image?.Dispose(); }
-            var path = await CaptureToFileAsync(Path.Combine(Path.GetTempPath(), "Toashot"), RegionOptions(screen?.Bounds ?? throw new InvalidOperationException("取不到屏幕信息")));
+            var path = await CaptureToFileAsync(TempDir, RegionOptions(screen?.Bounds ?? throw new InvalidOperationException("取不到屏幕信息")));
             Dispatcher.UIThread.Post(() =>
                 {
                     try { vm.FilePath = path; vm.Image = new Bitmap(path); }

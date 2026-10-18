@@ -26,19 +26,4 @@
             <Setter Property="TextElement.FontFamily" Value="{StaticResource AppFont}" />
         </Style>
     </Application.Styles>
-
-    <TrayIcon.Icons>
-        <TrayIcons>
-            <TrayIcon Icon="/Assets/icon.ico" ToolTipText="Toashot">
-                <TrayIcon.Menu>
-                    <NativeMenu>
-                        <NativeMenuItem Header="查看截图暂存区" Click="OnOpenToashotT" />
-                        <NativeMenuItemSeparator />
-                        <NativeMenuItem Header="设置" Click="OnOpenSettings" />
-                        <NativeMenuItem Header="退出" Click="OnExit" />
-                    </NativeMenu>
-                </TrayIcon.Menu>
-            </TrayIcon>
-        </TrayIcons>
-    </TrayIcon.Icons>
 </Application>

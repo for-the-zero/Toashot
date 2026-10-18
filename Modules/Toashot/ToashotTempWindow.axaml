@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shadui="using:ShadUI"
         xmlns:vm="using:Toashot.Modules.Toashot"
+        xmlns:lucide="using:Lucide.Avalonia"
         x:Class="Toashot.Modules.Toashot.ToashotTempWindow"
         x:DataType="vm:ToashotTempViewModel"
         Title="截图暂存区"
@@ -14,5 +15,56 @@
         <vm:ToashotTempViewModel />
     </Design.DataContext>
 
-    <Button Content="Test" />
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Padding="12,8">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Toashot" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                    <Button Classes="Icon" ToolTip.Tip="清空" Command="{Binding ClearCommand}">
+                        <lucide:LucideIcon Kind="Trash" Size="16"/>
+                    </Button>
+                    <Button Classes="Icon" ToolTip.Tip="打开暂存文件夹" Command="{Binding OpenFolderCommand}">
+                        <lucide:LucideIcon Kind="FolderOpen" Size="16"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Margin="6,4">
+            <TextBlock Text="暂无截图" FontSize="14" Margin="16" IsVisible="{Binding !HasShots}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ScrollViewer x:Name="ShotList" IsVisible="{Binding HasShots}" Margin="0"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalContentAlignment="Top"
+            >
+                <ItemsControl ItemsSource="{Binding Shots}" VerticalAlignment="Top">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Columns}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Height="{Binding CardHeight}" CornerRadius="8" ClipToBounds="True" Margin="2" Background="#22808080">
+                                <Grid RowDefinitions="*,Auto">
+                                    <Image Source="{Binding Image}" Height="{Binding ImageHeight}" Stretch="Fill" ToolTip.Tip="{Binding FileName}"/>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4" Margin="2,6" HorizontalAlignment="Center">
+                                        <Button Classes="Icon" ToolTip.Tip="复制到剪贴板" Command="{Binding CopyCommand}">
+                                            <lucide:LucideIcon Kind="Copy" Size="14"/>
+                                        </Button>
+                                        <Button Classes="Icon" ToolTip.Tip="保存到目标目录" Command="{Binding SaveCommand}">
+                                            <lucide:LucideIcon Kind="Save" Size="14"/>
+                                        </Button>
+                                        <Button Classes="Icon" ToolTip.Tip="忽略" Command="{Binding DeleteCommand}">
+                                            <lucide:LucideIcon Kind="Trash" Size="14"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
 </shadui:Window>
